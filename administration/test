@@ -1,0 +1,122 @@
+from django import forms
+from .models import CustomUser, Teacher, Parent, Student, StudentPerformance, Payment, Grade, HealthRecord, Event, Curriculum, LearningObjective, Standard, Assessment, LibraryBook, LibraryBorrow, CalendarEvent, ChatMessage, AttendanceReport, StudentAttendance, TeacherAttendance
+
+
+class UserForm(forms.ModelForm):
+    class Meta:
+        model = CustomUser
+        fields = ['first_name', 'last_name', 'user_type', 'date_of_birth', 'gender', 'address', 'phone_number', 'email']
+
+
+class TeacherForm(forms.ModelForm):
+    class Meta:
+        model = Teacher
+        fields = ['subject', 'courses', 'qualifications', 'experience']
+
+
+class ParentForm(forms.ModelForm):
+    class Meta:
+        model = Parent
+        fields = ['children', 'occupation']
+
+
+class StudentForm(forms.ModelForm):
+    class Meta:
+        model = Student
+        fields = ['courses', 'section', 'parents']
+
+
+class StudentPerformanceForm(forms.ModelForm):
+    class Meta:
+        model = StudentPerformance
+        fields = ['exam_name', 'exam_date', 'subject', 'score', 'attendance_report', 'grade_result']
+
+
+class PaymentForm(forms.ModelForm):
+    class Meta:
+        model = Payment
+        fields = ['amount']
+
+
+class GradeForm(forms.ModelForm):
+    class Meta:
+        model = Grade
+        fields = ['course', 'grade']
+
+
+class HealthRecordForm(forms.ModelForm):
+    class Meta:
+        model = HealthRecord
+        fields = ['height', 'weight']
+
+
+class EventForm(forms.ModelForm):
+    class Meta:
+        model = Event
+        fields = ['name', 'description', 'date', 'attendees']
+
+
+class CurriculumForm(forms.ModelForm):
+    class Meta:
+        model = Curriculum
+        fields = ['name', 'description']
+
+
+class LearningObjectiveForm(forms.ModelForm):
+    class Meta:
+        model = LearningObjective
+        fields = ['description']
+
+
+class StandardForm(forms.ModelForm):
+    class Meta:
+        model = Standard
+        fields = ['description']
+
+
+class AssessmentForm(forms.ModelForm):
+    class Meta:
+        model = Assessment
+        fields = ['name', 'course', 'description']
+
+
+class LibraryBookForm(forms.ModelForm):
+    class Meta:
+        model = LibraryBook
+        fields = ['title', 'author', 'description', 'quantity']
+
+
+class LibraryBorrowForm(forms.ModelForm):
+    class Meta:
+        model = LibraryBorrow
+        fields = ['book']
+
+
+class CalendarEventForm(forms.ModelForm):
+    class Meta:
+        model = CalendarEvent
+        fields = ['title', 'description', 'start_time', 'end_time']
+
+
+class ChatMessageForm(forms.ModelForm):
+    class Meta:
+        model = ChatMessage
+        fields = ['message']
+
+
+class AttendanceReportForm(forms.ModelForm):
+    class Meta:
+        model = AttendanceReport
+        fields = ['date', 'student_attendance', 'teacher_attendance']
+
+
+class StudentAttendanceForm(forms.ModelForm):
+    class Meta:
+        model = StudentAttendance
+        fields = ['student', 'is_present']
+
+
+class TeacherAttendanceForm(forms.ModelForm):
+    class Meta:
+        model = TeacherAttendance
+        fields = ['teacher', 'is_present']

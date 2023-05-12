@@ -1,0 +1,191 @@
+from django.contrib.auth.models import AbstractUser
+from django.db import models
+
+class CustomUser(AbstractUser):
+    USER_TYPE_CHOICES = (
+        ('teacher', 'Teacher'),
+        ('parent', 'Parent'),
+        ('student', 'Student'),
+        ('admin', 'Admin'),
+    )
+    user_type = models.CharField(choices=USER_TYPE_CHOICES, max_length=20)
+    date_of_birth = models.DateField(null=True, blank=True)
+    gender = models.CharField(max_length=20, choices=[('male', 'Male'), ('female', 'Female')], null=True, blank=True)
+    address = models.TextField(null=True, blank=True)
+    phone_number = models.CharField(max_length=20, null=True, blank=True)
+    email = models.EmailField(unique=True)
+    date_joined = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.username
+
+class Teacher(models.Model):
+    user = models.OneToOneField(CustomUser, on_delete=models.CASCADE, primary_key=True)
+    subject = models.CharField(max_length=255)
+    courses = models.ManyToManyField('Course')
+    qualifications = models.TextField(null=True, blank=True)
+    experience = models.TextField(null=True, blank=True)
+
+class Parent(models.Model):
+    user = models.OneToOneField(CustomUser, on_delete=models.CASCADE, primary_key=True)
+    children = models.ManyToManyField('Student')
+    occupation = models.CharField(max_length=255)
+
+class Student(models.Model):
+    user = models.OneToOneField(CustomUser, on_delete=models.CASCADE, primary_key=True)
+    courses = models.ManyToManyField('Course')
+    section = models.CharField(max_length=255)
+    classRoom = models.CharField(max_length=255)
+    parents = models.ManyToManyField(Parent)
+
+class Admin(models.Model):
+    user = models.OneToOneField(CustomUser, on_delete=models.CASCADE, primary_key=True)
+
+class StudentPerformance(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    exam_name = models.CharField(max_length=200)
+    exam_date = models.DateField()
+    subject = models.CharField(max_length=200)
+    score = models.FloatField()
+    attendance_report = models.CharField(max_length=200)
+    grade_result = models.CharField(max_length=200)
+    
+    class Meta:
+        verbose_name_plural = "Student Performances"
+
+
+class Payment(models.Model):
+    student = models.ForeignKey('User', on_delete=models.CASCADE, related_name='payments')
+    amount = models.DecimalField(max_digits=8, decimal_places=2)
+    date_paid = models.DateField(auto_now_add=True)
+
+class Grade(models.Model):
+    student = models.ForeignKey('User', on_delete=models.CASCADE, related_name='grades')
+    course = models.ForeignKey('Course', on_delete=models.CASCADE)
+    grade = models.DecimalField(max_digits=4, decimal_places=2)
+    date_graded = models.DateField(auto_now_add=True)
+
+class HealthRecord(models.Model):
+    student = models.ForeignKey('User', on_delete=models.CASCADE, related_name='health_records')
+    height = models.DecimalField(max_digits=5, decimal_places=2)
+    weight = models.DecimalField(max_digits=5, decimal_places=2)
+    date_recorded = models.DateField(auto_now_add=True)
+
+class Event(models.Model):
+    name = models.CharField(max_length=255)
+    description = models.TextField()
+    date = models.DateField()
+    attendees = models.ManyToManyField('User')
+
+class Curriculum(models.Model):
+    name = models.CharField(max_length=255)
+    description = models.TextField()
+
+class LearningObjective(models.Model):
+    curriculum = models.ForeignKey('Curriculum', on_delete=models.CASCADE)
+    description = models.TextField()
+
+class Standard(models.Model):
+    curriculum = models.ForeignKey('Curriculum', on_delete=models.CASCADE)
+    description = models.TextField()
+
+class Assessment(models.Model):
+    name = models.CharField(max_length=255)
+    course = models.ForeignKey('Course', on_delete=models.CASCADE)
+    description = models.TextField()
+
+class LibraryBook(models.Model):
+    title = models.CharField(max_length=255)
+    author = models.CharField(max_length=255)
+    description = models.TextField()
+    quantity = models.PositiveIntegerField()
+
+class LibraryBorrow(models.Model):
+    student = models.ForeignKey(User, on_delete=models.CASCADE)
+    book = models.ForeignKey('LibraryBook', on_delete=models.CASCADE)
+    date_borrowed = models.DateField(auto_now_add=True)
+    date_returned = models.DateField(null=True, blank=True)
+
+class CalendarEvent(models.Model):
+    title = models.CharField(max_length=200)
+    description = models.TextField(blank=True, null=True)
+    start_time = models.DateTimeField()
+    end_time = models.DateTimeField()
+
+    class Meta:
+        verbose_name_plural = "Calendar Events"
+
+
+class ChatRoom(models.Model):
+    name = models.CharField(max_length=200)
+
+    def __str__(self):
+        return self.name
+
+
+class ChatMessage(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    chat_room = models.ForeignKey(ChatRoom, on_delete=models.CASCADE)
+    message = models.TextField()
+    timestamp = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ('timestamp',)
+        
+class AttendanceReport(models.Model):
+    date = models.DateField()
+    student_attendance = models.ManyToManyField(StudentAttendance)
+    teacher_attendance = models.ManyToManyField(TeacherAttendance)
+    
+    def get_total_student_present(self):
+        return self.student_attendance.filter(is_present=True).count()
+    
+    def get_total_student_absent(self):
+        return self.student_attendance.filter(is_present=False).count()
+    
+    def get_total_teacher_present(self):
+        return self.teacher_attendance.filter(is_present=True).count()
+    
+    def get_total_teacher_absent(self):
+        return self.teacher_attendance.filter(is_present=False).count()
+    
+    def __str__(self):
+        return f"Attendance Report for {self.date}"
+
+
+class StudentAttendance(models.Model):
+    date = models.DateField()
+    student = models.ForeignKey(User, on_delete=models.CASCADE, limit_choices_to={'user_type': User.STUDENT})
+    is_present = models.BooleanField(default=True)
+
+class TeacherAttendance(models.Model):
+    date = models.DateField()
+    teacher = models.ForeignKey(User, on_delete=models.CASCADE, limit_choices_to={'user_type': User.TEACHER})
+    is_present = models.BooleanField(default=True)
+
+class Subject(models.Model):
+    name = models.CharField(max_length=255)
+
+    def __str__(self):
+        return self.name
+
+class classRoom(models.Model):
+    name = models.CharField(max_length=255)
+
+    def __str__(self):
+        return self.name
+
+class Section(models.Model):
+    name = models.CharField(max_length=255)
+    cls = models.ForeignKey(Class, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return f"{self.cls} - {self.name}"
+
+class Notification(models.Model):
+    title = models.CharField(max_length=255)
+    description = models.TextField()
+    date_posted = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.title

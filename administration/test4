@@ -1,0 +1,137 @@
+from django.urls import path
+from administration.views import *
+
+app_name = 'administration'
+
+urlpatterns = [
+    path('', index, name='index'),
+
+    # Parent URLs
+    path('administration/parent_list', ParentListView.as_view(), name='parent_list'),
+    path('administration/parent_create/', ParentCreateView.as_view(), name='parent_create'),
+    path('administration/parent_update/<int:pk>/', ParentUpdateView.as_view(), name='parent_update'),
+    path('administration/parent_delete/<int:pk>/', ParentDeleteView.as_view(), name='parent_delete'),
+
+    # Teacher URLs
+    path('administration/teacher', TeacherListView.as_view(), name='teacher_list'),
+    path('administration/teacher/create/', TeacherCreateView.as_view(), name='teacher_create'),
+    path('administration/teacher/update/<int:pk>/', TeacherUpdateView.as_view(), name='teacher_update'),
+    path('administration/teacher/attendance/', teacher_attendance, name='teacher_attendance'),
+    path('administration/teacher/attendance/list/', teacher_attendance_list, name='teacher_attendance_list'),
+
+    # Student URLs
+    path('administration/student', StudentListView.as_view(), name='student_list'),
+    path('administration/student/create/', StudentCreateView.as_view(), name='student_create'),
+    path('administration/student/update/<int:pk>/', StudentUpdateView.as_view(), name='student_update'),
+    path('administration/student/delete/<int:pk>/', StudentDeleteView.as_view(), name='student_delete'),
+    path('administration/student/profile/', StudentProfileView.as_view(), name='student_profile'),
+    path('administration/student-performance/', views.StudentPerformanceListView.as_view(), name='studentperformance-list'),
+    path('administration/student-performance/create/', views.StudentPerformanceCreateView.as_view(), name='studentperformance-create'),
+
+    # Attendance URLs
+    path('administration/attendance', AttendanceListView.as_view(), name='attendance_list'),
+    path('administration/attendance/create/', AttendanceCreateView.as_view(), name='attendance_create'),
+    path('administration/attendance/<int:pk>/', AttendanceDetailView.as_view(), name='attendance_detail'),
+
+    # course
+    path('administration/course/', views.CourseListView.as_view(), name='course-list'),
+    path('administration/course/<int:pk>/', views.CourseDetailView.as_view(), name='course-detail'),
+    path('administration/course/create/', views.CourseCreateView.as_view(), name='course-create'),
+    path('administration/course/<int:pk>/update/', views.CourseUpdateView.as_view(), name='course-update'),
+    path('administration/course/<int:pk>/delete/', views.CourseDeleteView.as_view(), name='course-delete'),
+
+    # payment
+    path('administration/payment/', views.PaymentListView.as_view(), name='payment-list'),
+    path('administration/payment/create/', views.PaymentCreateView.as_view(), name='payment-create'),
+    path('administration/payment/<int:pk>/update/', views.PaymentUpdateView.as_view(), name='payment-update'),
+    path('administration/payment/<int:pk>/delete/', views.PaymentDeleteView.as_view(), name='payment-delete'),
+
+    # grade
+    path('administration/grade/', views.GradeListView.as_view(), name='grade-list'),
+    path('administration/grade/<int:pk>/', views.GradeDetailView.as_view(), name='grade-detail'),
+    path('administration/grade/create/', views.GradeCreateView.as_view(), name='grade-create'),
+    path('administration/grade/<int:pk>/update/', views.GradeUpdateView.as_view(), name='grade-update'),
+    path('administration/grade/<int:pk>/delete/', views.GradeDeleteView.as_view(), name='grade-delete'),
+
+    # healthrecord
+    path('administration/healthrecord/', views.HealthRecordListView.as_view(), name='healthrecord-list'),
+    path('administration/healthrecord/<int:pk>/', views.HealthRecordDetailView.as_view(), name='healthrecord-detail'),
+    path('administration/healthrecord/create/', views.HealthRecordCreateView.as_view(), name='healthrecord-create'),
+    path('administration/healthrecord/<int:pk>/update/', views.HealthRecordUpdateView.as_view(), name='healthrecord-update'),
+    path('administration/healthrecord/<int:pk>/delete/', views.HealthRecordDeleteView.as_view(), name='healthrecord-delete'),
+
+    # event
+    path('administration/event/', views.EventListView.as_view(), name='event-list'),
+    path('administration/event/create/', views.create_event, name='event-create'),
+    path('administration/event/<int:pk>/update/', views.update_event, name='event-update'),
+    path('administration/event/<int:pk>/delete/', views.EventDeleteView.as_view(), name='event-delete'),
+    
+    # learning Objectives
+    path('administration/learningobjectives/', LearningObjectiveListView.as_view(), name='learningobjective_list'),
+    path('administration/learningobjectives/<int:pk>/', LearningObjectiveDetailView.as_view(), name='learningobjective_detail'),
+    path('administration/learningobjectives/create/', LearningObjectiveCreateView.as_view(), name='learningobjective_create'),
+    path('administration/learningobjectives/<int:pk>/update/', LearningObjectiveUpdateView.as_view(), name='learningobjective_update'),
+    path('administration/learningobjectives/<int:pk>/delete/', LearningObjectiveDeleteView.as_view(), name='learningobjective_delete'),
+
+    # standards
+    path('administration/standards/', StandardListView.as_view(), name='standard_list'),
+    path('administration/standards/<int:pk>/', StandardDetailView.as_view(), name='standard_detail'),
+    path('administration/standards/create/', StandardCreateView.as_view(), name='standard_create'),
+    path('administration/standards/<int:pk>/update/', StandardUpdateView.as_view(), name='standard_update'),
+    path('administration/standards/<int:pk>/delete/', StandardDeleteView.as_view(), name='standard_delete'),
+
+    # assessment
+    path('administration/assessments/', AssessmentListView.as_view(), name='assessment_list'),
+    path('administration/assessments/create/', AssessmentCreateView.as_view(), name='assessment_create'),
+    path('administration/assessments/<int:pk>/update/', AssessmentUpdateView.as_view(), name='assessment_update'),
+    path('administration/assessments/<int:pk>/delete/', AssessmentDeleteView.as_view(), name='assessment_delete'),
+
+    # library
+    path('administration/librarybooks/', LibraryBookList.as_view(), name='librarybook_list'),
+    path('administration/librarybooks/create/', LibraryBookCreate.as_view(), name='librarybook_create'),
+    path('administration/librarybooks/<int:pk>/update/', LibraryBookUpdate.as_view(), name='librarybook_update'),
+    path('administration/librarybooks/<int:pk>/delete/', LibraryBookDelete.as_view(), name='librarybook_delete'),
+    path('administration/libraryborrows/', LibraryBorrowList.as_view(), name='libraryborrow_list'),
+    path('administration/libraryborrows/create/', LibraryBorrowCreate.as_view(), name='libraryborrow_create'),
+    path('administration/libraryborrows/<int:pk>/update/', LibraryBorrowUpdate.as_view(), name='libraryborrow_update'),
+    path('administration/libraryborrows/<int:pk>/delete/', LibraryBorrowDelete.as_view(), name='libraryborrow_delete'),
+
+    # calendar
+    path('administration/calendar/', CalendarEventListView.as_view(), name='event_list'),
+    path('administration/calendar/create/', CalendarEventCreateView.as_view(), name='event_create'),
+    path('administration/calendar/update/<int:pk>/', CalendarEventUpdateView.as_view(), name='event_update'),
+    path('administration/calendar/delete/<int:pk>/', CalendarEventDeleteView.as_view(), name='event_delete'),
+
+    # chat
+    path('administration/chat/', chat_rooms, name='chat_rooms'),
+    path('administration/chat/create/', create_chat_room, name='create_chat_room'),
+    path('administration/chat/edit/<int:chat_room_id>/', edit_chat_room, name='edit_chat_room'),
+    path('administration/chat/delete/<int:chat_room_id>/', delete_chat_room, name='delete_chat_room'),
+    path('administration/chat/<int:chat_room_id>/', chat_messages, name='chat_messages'),
+    path('administration/chat/<int:chat_room_id>/delete/<int:chat_message_id>/', delete_chat_message, name='delete_chat_message'),
+    path('administration/chat/<int:chat_room_id>/get_messages/', get_chat_messages, name='get_chat_messages'),
+
+    # notifications
+    path('administration/notifications/', NotificationListView.as_view(), name='notification_list'),
+    path('administration/notifications/create/', create_notification, name='notification_create'),
+    path('administration/notifications/update/<int:pk>/', update_notification, name='notification_update'),
+    path('administration/notifications/delete/<int:pk>/', NotificationDeleteView.as_view(), name='notification_delete'),
+
+    # sections
+    path('administration/sections/', SectionListView.as_view(), name='section_list'),
+    path('administration/sections/create/', SectionCreateView.as_view(), name='section_create'),
+    path('administration/sections/<int:pk>/update/', SectionUpdateView.as_view(), name='section_update'),
+    path('administration/sections/<int:pk>/delete/', SectionDeleteView.as_view(), name='section_delete'),
+
+    # classes
+    path('administration/classes/', ClassListView.as_view(), name='class_list'),
+    path('administration/classes/create/', ClassCreateView.as_view(), name='class_create'),
+    path('administration/classes/<int:pk>/update/', ClassUpdateView.as_view(), name='class_update'),
+    path('administration/classes/<int:pk>/delete/', ClassDeleteView.as_view(), name='class_delete'),
+    
+    # subjects
+    path('administration/subjects/', SubjectListView.as_view(), name='subject_list'),
+    path('administration/subjects/create/', SubjectCreateView.as_view(), name='subject_create'),
+    path('administration/subjects/<int:pk>/update/', SubjectUpdateView.as_view(), name='subject_update'),
+    path('administration/subjects/<int:pk>/delete/', SubjectDeleteView.as_view(), name='subject_delete'),
+]

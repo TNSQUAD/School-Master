@@ -1,0 +1,79 @@
+from .models import CustomUser, Teacher, Parent, Student, Admin
+
+class UserForm(forms.ModelForm):
+    class Meta:
+        model = CustomUser
+        fields = ['username', 'password', 'user_type', 'first_name', 'last_name', 'email', 'date_of_birth', 'gender', 'address', 'phone_number']
+
+class TeacherForm(forms.ModelForm):
+    class Meta:
+        model = Teacher
+        fields = ['subject', 'courses', 'qualifications', 'experience']
+
+class ParentForm(forms.ModelForm):
+    class Meta:
+        model = Parent
+        fields = ['children', 'occupation']
+
+class StudentForm(forms.ModelForm):
+    class Meta:
+        model = Student
+        fields = ['courses', 'parents', 'section']
+
+class AdminForm(forms.ModelForm):
+    class Meta:
+        model = Admin
+        fields = []
+#########################################################
+from django.contrib.auth.models import AbstractUser
+from django.db import models
+
+class User(AbstractUser):
+    TEACHER = 'teacher'
+    PARENT = 'parent'
+    STUDENT = 'student'
+    ADMIN = 'admin'
+    USER_TYPE_CHOICES = [
+        (TEACHER, 'Teacher'),
+        (PARENT, 'Parent'),
+        (STUDENT, 'Student'),
+        (ADMIN, 'Admin'),
+    ]
+    user_type = models.CharField(max_length=10, choices=USER_TYPE_CHOICES, default=STUDENT)
+
+class StudentAttendance(models.Model):
+    date = models.DateField()
+    student = models.ForeignKey(User, on_delete=models.CASCADE, limit_choices_to={'user_type': User.STUDENT})
+    is_present = models.BooleanField(default=True)
+
+class TeacherAttendance(models.Model):
+    date = models.DateField()
+    teacher = models.ForeignKey(User, on_delete=models.CASCADE, limit_choices_to={'user_type': User.TEACHER})
+    is_present = models.BooleanField(default=True)
+
+class Subject(models.Model):
+    name = models.CharField(max_length=255)
+
+    def __str__(self):
+        return self.name
+
+class Class(models.Model):
+    name = models.CharField(max_length=255)
+
+    def __str__(self):
+        return self.name
+
+class Section(models.Model):
+    name = models.CharField(max_length=255)
+    cls = models.ForeignKey(Class, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return f"{self.cls} - {self.name}"
+
+class Notification(models.Model):
+    title = models.CharField(max_length=255)
+    description = models.TextField()
+    date_posted = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.title

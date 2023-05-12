@@ -133,3 +133,9 @@ HealthRecordDetailView: A view that displays the details of a single HealthRecor
 HealthRecordUpdateView: A view that allows users to update an existing HealthRecord object.
 HealthRecordDeleteView: A view that allows users to delete an existing HealthRecord object.
 We have also created a HealthRecordForm form in forms.py to handle the creation and updating of HealthRecord objects.
+
+In this implementation, we've created a CustomUser model that extends Django's AbstractUser model, and added a user_type field to differentiate between different user types. We've also added some additional fields that are common across all user types, such as date_of_birth, gender, address, phone_number, and email.
+
+For each user type, we've created a separate model (Teacher, Parent, Student, and Admin) that has a one-to-one relationship with the CustomUser model. These models can have additional fields that are specific to each user type. For example, the Teacher model has a subject field, a courses ManyToManyField, qualifications and experience.
+
+Note that we've used null=True and 
