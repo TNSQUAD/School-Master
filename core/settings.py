@@ -24,7 +24,7 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
-    # 'jazzmin',
+    'jazzmin',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -33,6 +33,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     #local
     'administration',
+    'student',
 ]
 
 MIDDLEWARE = [
@@ -130,4 +131,4 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-# JAZZMIN_SETTINGS = JAZZMIN_SETTINGS
+JAZZMIN_SETTINGS = JAZZMIN_SETTINGS

@@ -1,0 +1,42 @@
+This code defines several models that are used in a school management system. The main model is `CustomUser` which extends Django's built-in `AbstractUser` model to include additional fields such as `user_type`, `date_of_birth`, `gender`, `address`, and `phone_number`. 
+
+There are four types of users in the system, each represented by a separate model: `Teacher`, `Parent`, `Student`, and `Admin`. Each of these models has a one-to-one relationship with a `CustomUser` object. 
+
+The `Teacher` model includes a `subject` field, as well as a many-to-many relationship with the `Course` model. 
+
+The `Parent` model includes a many-to-many relationship with the `Student` model, representing the fact that a parent can have multiple children in the school. 
+
+The `Student` model includes many-to-many relationships with both the `Course` and `Parent` models, as well as additional fields for `section` and `classRoom`.
+
+There are several additional models that are related to the user models, including `StudentPerformance` for tracking student performance on exams, `Payment` for tracking payments made by users, `Grade` for tracking grades earned by students in courses, `HealthRecord` for tracking health records of users, `Event` for tracking school events and attendees, `Curriculum` for tracking curricula and related learning objectives and standards, `Assessment` for tracking assessments within courses, and `LibraryBook` and `LibraryBorrow` for tracking library books and who has borrowed them.
+
+Finally, there is also a `CalendarEvent` model for tracking calendar events.
+
+
+This is a comprehensive models.py file, it contains the models that define the database schema for your Django project. 
+
+It includes the default Django `AbstractUser` model subclassed as `CustomUser`, which adds custom fields like `user_type`, `date_of_birth`, `gender`, `address`, `phone_number`, `email`, and `date_joined`. 
+
+There are also models for `Teacher`, `Parent`, `Student`, and `Admin`, which have one-to-one relationships with `CustomUser`. These models store additional information about these user types, such as the `subject` and `qualifications` of a `Teacher`, the `occupation` of a `Parent`, the `courses`, `section`, `classRoom` and `parents` of a `Student`, and no additional fields for an `Admin`.
+
+The `Course` model represents the courses offered, with fields for `name`, `code`, `description`, `teacher`, and `students`. A course can have many students and is taught by only one teacher.
+
+The `StudentPerformance` model stores information about a student's performance in exams, with fields for `exam_name`, `exam_date`, `subject`, `score`, `attendance_report`, and `grade`.
+
+The `Payment` model represents payments made by users, with fields for `amount` and `date_paid`. 
+
+The `Grade` model stores the grades earned by a user for a particular course, with fields for `course`, `grade`, and `date_graded`. 
+
+The `HealthRecord` model stores the height and weight measurements of a user, with fields for `height` and `weight`.
+
+The `Event` model represents events with fields for `name`, `description`, `date`, and `attendees`.
+
+The `Curriculum`, `LearningObjective`, and `Standard` models store information about the educational curriculum, with fields for `name` and `description`.
+
+The `Assessment` model represents assessments, with fields for `name`, `course`, and `description`.
+
+The `LibraryBook` model represents books in a library, with fields for `title`, `author`, `description`, and `quantity`.
+
+The `LibraryBorrow` model represents book borrowings, with fields for `user`, `book`, `date_borrowed`, and `date_returned`.
+
+Finally, the `CalendarEvent` model stores events on a calendar, with fields for `title`, `description`, `start_time`, and `end_time`.
